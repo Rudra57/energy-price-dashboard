@@ -31,10 +31,11 @@ def load_data():
     df = df.dropna().copy()
     df["date"] = pd.to_datetime(df["date"])
 
-   df["hour"] = df["hour"].astype(str).str.extract(r"(\d+)", expand=False)
-df["hour"] = pd.to_numeric(df["hour"], errors="coerce")
-df = df.dropna(subset=["hour"]).copy()
-df["hour"] = df["hour"].astype(int)
+    # FIXED hour column safely
+    df["hour"] = df["hour"].astype(str).str.extract(r"(\d+)", expand=False)
+    df["hour"] = pd.to_numeric(df["hour"], errors="coerce")
+    df = df.dropna(subset=["hour"]).copy()
+    df["hour"] = df["hour"].astype(int)
 
     df["day"] = df["date"].dt.day
     df["month"] = df["date"].dt.month
@@ -45,8 +46,8 @@ df["hour"] = df["hour"].astype(int)
     df["price_lag_24"] = df["germany_energy_price"].shift(24)
 
     df = df.dropna().copy()
-    return df
 
+    return df
 df = load_data()
 
 country_features = [
