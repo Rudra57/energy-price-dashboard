@@ -31,10 +31,10 @@ def load_data():
     df = df.dropna().copy()
     df["date"] = pd.to_datetime(df["date"])
 
-    if df["hour"].dtype == "object":
-        df["hour"] = df["hour"].astype(str).str.extract(r"(\d+)")[0].astype(int)
-    else:
-        df["hour"] = df["hour"].astype(int)
+   df["hour"] = df["hour"].astype(str).str.extract(r"(\d+)", expand=False)
+df["hour"] = pd.to_numeric(df["hour"], errors="coerce")
+df = df.dropna(subset=["hour"]).copy()
+df["hour"] = df["hour"].astype(int)
 
     df["day"] = df["date"].dt.day
     df["month"] = df["date"].dt.month
